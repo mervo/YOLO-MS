@@ -6,6 +6,17 @@
 ![pytorch 1.12.1](https://img.shields.io/badge/pytorch-1.12.0-blue.svg)
 [![docs](https://img.shields.io/badge/docs-latest-blue)](README.md)
 
+**Run from YOLO-MS parent folder:**
+```commandline
+docker build -t yoloms -f docker/Dockerfile .
+export DATA_DIR=/data/datasets/coco
+docker run --gpus all --shm-size=8g -it -v ${DATA_DIR}:/data yoloms
+
+python demo/image_demo.py demo/demo.jpg configs/yoloms/yoloms-se_syncbn_fast_8xb8-300e_coco.py weights/yoloms-se_syncbn_fast_8xb8-300e_coco-b0dc997d.pth
+python tools/train.py configs/yoloms/yoloms-se_syncbn_fast_8xb8-300e_coco.py --work-dir weights --cfg-options load_from=weights/yoloms-se_syncbn_fast_8xb8-300e_coco-b0dc997d.pth custom_hooks.0.strict_load=False 
+```
+
+
 </div>
 
 This repository contains the official implementation of the following paper:

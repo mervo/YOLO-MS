@@ -164,4 +164,11 @@ data
 data/*
 log/*
 
-*.pth
+#*.pth
+
+coco
+coco/*
+annotations
+annotations/*
+
+.idea

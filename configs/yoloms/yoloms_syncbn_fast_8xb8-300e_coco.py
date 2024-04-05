@@ -4,12 +4,12 @@ _base_ = 'mmyolo::rtmdet/rtmdet_l_syncbn_fast_8xb32-300e_coco.py'
 
 # ========================Frequently modified parameters======================
 # -----data related-----
-data_root = 'data/coco/'
+data_root = '/data/coco_minitrain_25k/images'
 # Path of train annotation file
-train_ann_file = 'annotations/instances_train2017.json'
+train_ann_file = '/data/annotations/instances_minitrain2017.json'
 train_data_prefix = 'train2017/'  # Prefix of train image path
 # Path of val annotation file
-val_ann_file = 'annotations/instances_val2017.json'
+val_ann_file = '/data/annotations/instances_val2017.json'
 val_data_prefix = 'val2017/'  # Prefix of val image path
 
 # Number of classes for classification
@@ -135,3 +135,11 @@ val_dataloader = dict(
 test_dataloader = val_dataloader
 
 auto_scale_lr = dict(enable=True, base_batch_size=32 * 8)
+
+val_evaluator = dict(  # Validation evaluator config
+    type='mmdet.CocoMetric',  # The coco metric used to evaluate AR, AP, and mAP for detection
+    proposal_nums=(100, 1, 10),	# The number of proposal used to evaluate for detection
+    ann_file=val_ann_file,  # Annotation file path
+    metric='bbox',  # Metrics to be evaluated, `bbox` for detection
+)
+test_evaluator = val_evaluator  # Testing evaluator config
