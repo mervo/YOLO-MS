@@ -1,3 +1,8 @@
+#git clone https://github.com/mervo/YOLO-MS.git
+#docker build -t yoloms -f docker/Dockerfile .
+#export DATA_DIR=/data/datasets/coco
+#docker run --gpus all --shm-size=8g -it -v ${DATA_DIR}:/data yoloms
+
 ARG PYTORCH="1.12.1"
 ARG CUDA="11.3"
 ARG CUDNN="8"
@@ -27,6 +32,10 @@ RUN apt-get update \
 # Install MMEngine , MMCV and MMDet
 RUN pip install --no-cache-dir openmim && \
     mim install --no-cache-dir "mmengine==0.7.1" "mmcv==2.0.0rc4" "mmdet==3.0.0" "mmyolo==0.5.0"
+
+RUN git clone https://github.com/open-mmlab/mmdetection.git /mmdetection && \
+    cd /mmdetection && \
+    git checkout v3.0.0
 
 # Install MMYOLO
 RUN git clone https://github.com/open-mmlab/mmyolo.git /mmyolo && \
