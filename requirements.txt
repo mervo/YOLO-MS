@@ -2,4 +2,4 @@ einops==0.6.1
 yapf==0.40.1
 
 clearml
-proto3
+boto3
