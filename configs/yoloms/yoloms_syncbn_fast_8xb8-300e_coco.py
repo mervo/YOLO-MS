@@ -13,11 +13,20 @@ val_ann_file = '/data/annotations/instances_val2017.json'
 val_data_prefix = 'val2017/'  # Prefix of val image path
 
 # Number of classes for classification
-num_classes = 80
+num_classes = 3
+class_name = ('airplane', 'ship', 'vehicle', ) # dataset category name
+num_classes = len(class_name) # dataset category number
+# metainfo is a configuration that must be passed to the dataloader, otherwise it is invalid
+# palette is a display color for category at visualization
+# The palette length must be greater than or equal to the length of the classes
+metainfo = dict(classes=class_name, palette=[(20, 220, 60)])
+
+max_epochs = 300
+
 # Batch size of a single GPU during training
-train_batch_size_per_gpu = 8
+train_batch_size_per_gpu = 16
 # Worker to pre-fetch data for each single GPU during training
-train_num_workers = 10
+train_num_workers = 8
 # persistent_workers must be False if num_workers is 0.
 persistent_workers = True
 
@@ -143,3 +152,17 @@ val_evaluator = dict(  # Validation evaluator config
     metric='bbox',  # Metrics to be evaluated, `bbox` for detection
 )
 test_evaluator = val_evaluator  # Testing evaluator config
+
+default_hooks = dict(
+    # Save weights every 10 epochs and a maximum of two weights can be saved.
+    # The best model is saved automatically during model evaluation
+    checkpoint=dict(interval=10, max_keep_ckpts=3, save_best='auto'),
+    # The warmup_mim_iter parameter is critical.
+    # The default value is 1000 which is not suitable for cat datasets.
+    param_scheduler=dict(max_epochs=max_epochs, warmup_mim_iter=10),
+    # The log printing interval is 5
+    logger=dict(type='LoggerHook', interval=5))
+# The evaluation interval is 10
+train_cfg = dict(max_epochs=max_epochs, val_interval=10)
+
+visualizer = dict(vis_backends=[dict(type='LocalVisBackend'),dict(type='TensorboardVisBackend')])

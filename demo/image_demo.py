@@ -103,8 +103,7 @@ def main():
 
     # init visualizer
     visualizer = VISUALIZERS.build(model.cfg.visualizer)
-    model.dataset_meta = {'classes': ( 'airplane', 'ship', 'vehicle'), 'palette': [(220, 20, 60), (119, 11, 32), (0, 0, 142)]}
-
+    # model.dataset_meta = {'classes': ('airplane', 'ship', 'vehicle'), 'palette': [(220, 20, 60), (119, 11, 32), (0, 0, 142)]}
     visualizer.dataset_meta = model.dataset_meta
     print(model.dataset_meta)
 
