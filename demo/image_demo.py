@@ -1,3 +1,5 @@
+# python demo/image_demo.py /data/datasets/vha/multiscale_plab.png /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/yoloms-se_syncbn_fast_8xb8-300e_coco.py /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/epoch_290.pth --show --score-thr 0.3
+
 # Refer to MMYOLO
 # Copyright (c) MCG-NKU. All rights reserved.
 import os
@@ -101,13 +103,19 @@ def main():
 
     # init visualizer
     visualizer = VISUALIZERS.build(model.cfg.visualizer)
+    model.dataset_meta = {'classes': ( 'airplane', 'ship', 'vehicle'), 'palette': [(220, 20, 60), (119, 11, 32), (0, 0, 142)]}
+
     visualizer.dataset_meta = model.dataset_meta
+    print(model.dataset_meta)
 
     # get file list
     files, source_type = get_file_list(args.img)
 
     # get model class name
-    dataset_classes = model.dataset_meta.get('classes')
+    # dataset_classes = model.dataset_meta.get('classes')
+    dataset_classes = ('airplane', 'ship', 'vehicle')
+    print(dataset_classes)
+
 
     # ready for labelme format if it is needed
     to_label_format = LabelmeFormat(classes=dataset_classes)
