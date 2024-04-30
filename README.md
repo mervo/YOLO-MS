@@ -13,7 +13,12 @@ export DATA_DIR=/data/datasets/coco
 docker run --gpus all --shm-size=8g -it -v ${DATA_DIR}:/data yoloms
 
 python demo/image_demo.py demo/demo.jpg configs/yoloms/yoloms-se_syncbn_fast_8xb8-300e_coco.py weights/yoloms-se_syncbn_fast_8xb8-300e_coco-b0dc997d.pth
-python tools/train.py configs/yoloms/yoloms-se_syncbn_fast_8xb8-300e_coco.py --work-dir weights --cfg-options load_from=weights/yoloms-se_syncbn_fast_8xb8-300e_coco-b0dc997d.pth custom_hooks.0.strict_load=False 
+python tools/train.py configs/yoloms/yoloms-se_syncbn_fast_8xb8-300e_coco.py --work-dir weights --cfg-options load_from=weights/yoloms-se_syncbn_fast_8xb8-300e_coco-b0dc997d.pth custom_hooks.0.strict_load=False
+python demo/image_sahi.py \
+    /data/datasets/vha/multiscale_plab.png \
+    /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/yoloms-se_syncbn_fast_8xb8-300e_coco.py \
+    /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/epoch_290.pth \
+    --show --score-thr 0.3 --patch-size 512 --patch-overlap-ratio 0.2 --merge-iou-thr 0.4 
 ```
 
 

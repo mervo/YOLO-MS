@@ -2,19 +2,11 @@
 """Perform MMYOLO inference on large images (as satellite imagery) as:
 
 ```shell
-wget -P checkpoint https://download.openmmlab.com/mmyolo/v0/yolov5/yolov5_s-v61_syncbn_fast_8xb16-300e_coco/yolov5_s-v61_syncbn_fast_8xb16-300e_coco_20220918_084700-86e02187.pth # noqa: E501, E261.
-
-python demo/large_image_demo.py \
-    demo/large_image.jpg \
-    configs/yolov5/yolov5_s-v61_syncbn_fast_8xb16-300e_coco.py \
-    checkpoint/yolov5_s-v61_syncbn_fast_8xb16-300e_coco_20220918_084700-86e02187.pth
-```
-
 python demo/image_sahi.py \
     /data/datasets/vha/multiscale_plab.png \
     /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/yoloms-se_syncbn_fast_8xb8-300e_coco.py \
     /data/datasets/vha/yolo-ms-20240429T071650Z-001/yolo-ms/epoch_290.pth \
-    --show --score-thr 0.3 --patch-size 512 --patch-overlap-ratio 0.2 --merge-iou-thr 0.4
+    --show --score-thr 0.3 --patch-size 512 --patch-overlap-ratio 0.2 --merge-iou-thr 0.4```
 """
 
 import os
