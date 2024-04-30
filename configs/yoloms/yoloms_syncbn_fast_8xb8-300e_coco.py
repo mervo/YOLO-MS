@@ -13,7 +13,6 @@ val_ann_file = '/data/annotations/instances_val2017.json'
 val_data_prefix = 'val2017/'  # Prefix of val image path
 
 # Number of classes for classification
-num_classes = 3
 class_name = ('airplane', 'ship', 'vehicle',)  # dataset category name
 num_classes = len(class_name)  # dataset category number
 # metainfo is a configuration that must be passed to the dataloader, otherwise it is invalid
