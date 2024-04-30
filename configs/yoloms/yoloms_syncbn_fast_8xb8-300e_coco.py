@@ -14,17 +14,17 @@ val_data_prefix = 'val2017/'  # Prefix of val image path
 
 # Number of classes for classification
 num_classes = 3
-class_name = ('airplane', 'ship', 'vehicle', ) # dataset category name
-num_classes = len(class_name) # dataset category number
+class_name = ('airplane', 'ship', 'vehicle',)  # dataset category name
+num_classes = len(class_name)  # dataset category number
 # metainfo is a configuration that must be passed to the dataloader, otherwise it is invalid
 # palette is a display color for category at visualization
 # The palette length must be greater than or equal to the length of the classes
-metainfo = dict(classes=class_name, palette=[(20, 220, 60)])
+metainfo = dict(classes=class_name, palette=[(255, 0, 0)])
 
 max_epochs = 300
 
 # Batch size of a single GPU during training
-train_batch_size_per_gpu = 16
+train_batch_size_per_gpu = 32
 # Worker to pre-fetch data for each single GPU during training
 train_num_workers = 8
 # persistent_workers must be False if num_workers is 0.
@@ -50,9 +50,6 @@ in_channels = [320, 640, 1280]
 mid_channels = [160, 320, 640]
 # Output channels of PAFPN
 out_channels = 240
-
-# Batch size of a single GPU during training
-train_batch_size_per_gpu = 8
 
 # Channel expand ratio for inputs of MS-Block
 in_expand_ratio = 3
@@ -106,14 +103,6 @@ model = dict(backbone=dict(_delete_=True,
                                            loss_weight=loss_bbox_weight)),
              train_cfg=dict(assigner=dict(num_classes=num_classes)))
 
-# according to the label information of class_with_id.txt, set the class_name
-# class_name = ('cat', )
-# num_classes = len(class_name)
-# metainfo = dict(
-#     classes=class_name,
-#     palette=[(220, 20, 60)]  # the color of drawing, free to set
-# )
-
 train_dataloader = dict(
     batch_size=train_batch_size_per_gpu,
     num_workers=train_num_workers,
@@ -143,26 +132,33 @@ val_dataloader = dict(
 
 test_dataloader = val_dataloader
 
-auto_scale_lr = dict(enable=True, base_batch_size=32 * 8)
+auto_scale_lr = dict(enable=True, base_batch_size=train_batch_size_per_gpu)
 
 val_evaluator = dict(  # Validation evaluator config
     type='mmdet.CocoMetric',  # The coco metric used to evaluate AR, AP, and mAP for detection
-    proposal_nums=(100, 1, 10),	# The number of proposal used to evaluate for detection
+    proposal_nums=(100, 1, 10),  # The number of proposal used to evaluate for detection
     ann_file=val_ann_file,  # Annotation file path
     metric='bbox',  # Metrics to be evaluated, `bbox` for detection
 )
 test_evaluator = val_evaluator  # Testing evaluator config
 
 default_hooks = dict(
-    # Save weights every 10 epochs and a maximum of two weights can be saved.
+    # Save weights every 10 epochs and a maximum of three weights can be saved.
     # The best model is saved automatically during model evaluation
     checkpoint=dict(interval=10, max_keep_ckpts=3, save_best='auto'),
+
     # The warmup_mim_iter parameter is critical.
     # The default value is 1000 which is not suitable for cat datasets.
-    param_scheduler=dict(max_epochs=max_epochs, warmup_mim_iter=10),
+    # param_scheduler=dict(max_epochs=max_epochs, warmup_mim_iter=10),
+    # param_scheduler=dict(
+    #     type='YOLOv5ParamSchedulerHook',
+    #     scheduler_type='cosine',
+    #     lr_factor=0.005,
+    #     max_epochs=max_epochs),
     # The log printing interval is 5
+
     logger=dict(type='LoggerHook', interval=5))
 # The evaluation interval is 10
 train_cfg = dict(max_epochs=max_epochs, val_interval=10)
 
-visualizer = dict(vis_backends=[dict(type='LocalVisBackend'),dict(type='TensorboardVisBackend')])
+visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), dict(type='TensorboardVisBackend')])

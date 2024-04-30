@@ -172,3 +172,5 @@ annotations
 annotations/*
 
 .idea
+
+weights/*
