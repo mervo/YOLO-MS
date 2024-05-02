@@ -18,7 +18,7 @@ num_classes = len(class_name)  # dataset category number
 # metainfo is a configuration that must be passed to the dataloader, otherwise it is invalid
 # palette is a display color for category at visualization
 # The palette length must be greater than or equal to the length of the classes
-metainfo = dict(classes=class_name, palette=[(255, 0, 0)])
+metainfo = dict(classes=class_name, palette=[(255, 0, 0), (255, 0, 0), (255, 0, 0)])
 
 max_epochs = 300
 
